@@ -17,7 +17,7 @@ class MonthRenderer
       @visibleWeeksNum = props.visibleWeeksNum
 
     if props.prefix?
-      @prefix = prefix
+      @prefix = props.prefix
 
     @onlyFuture = props.onlyFuture
     @theme = props.theme
