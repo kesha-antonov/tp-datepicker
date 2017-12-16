@@ -1,197 +1,352 @@
 @import 'themes/default';
+@import 'themes/tutu';
 @import 'icons';
 
 input.tp-datepicker-trigger {
-  @extend .tp-datepicker-icon.tp-datepicker-icon-calendar;
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-size: auto $tpDatepickerCalendarViewBoxHeight;
-  cursor: pointer;
-  transition: border .5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    @extend .tp-datepicker-icon.tp-datepicker-icon-calendar;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: auto $tpDatepickerCalendarViewBoxHeight;
+    cursor: pointer;
+    transition: border .5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 input.tp-datepicker-trigger.tp-datepicker-trigger--active {
-  border: $tpDatepickerBorderActive;
+    border: $tpDatepickerBorderActive;
 }
 
-.tp-datepicker {
-  &, * {
-    box-sizing: border-box;
-  }
+@mixin tp-datepicker {
+    &, * {
+        box-sizing: border-box;
+    }
 
-  /**
-   * Remove most spacing between table cells.
-   */
+    /**
+     * Remove most spacing between table cells.
+     */
 
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
 
-  td,
-  th {
-    padding: 0;
-  }
+    td,
+    th {
+        padding: 0;
+    }
 
-  font-weight: 400;
-  font-size: 13px;
-  transform: scale(0);
-  min-width: 200px;
-  width: 100%;
-  max-width: 260px;
-  height: 220px;
-  padding-bottom: 15px;
-  padding-top: 5px;
-  z-index: $tpDatepickerZIndex;
-  border: $tpDatepickerBorder;
-  background: $tpDatepickerBackgroundColor;
-  box-shadow: $tpDatepickerBoxShadow;
-  transition: all .2s cubic-bezier(0.165, 0.84, 0.44, 1);
-  position: absolute;
-  &.tp-datepicker--active {
-    transform: scale(1);
-  }
-
-  .tp-datepicker-header {
+    font-weight: 400;
+    font-size: 13px;
+    transform: scale(0);
+    min-width: 200px;
     width: 100%;
-    height: 40px;
-    text-align: center;
-    padding: 10px 9px 0;
-  }
-
-  .tp-datepicker-container {
-    padding: 0 5px;
-  }
-
-  &.tp-datepicker-hidden {
-    opacity: 0;
-    transform: scale(1, 0);
-  }
-
-  &.tp-datepicker-simple {
-    .tp-datepicker-current:hover {
-      background-color: $tpDatepickerSecondColor;
-      color: $tpDatepickerBackgroundColor;
-    }
-  }
-
-  .tp-datepicker-table{
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-
-    .tp-datepicker-day_name {
-      text-transform: uppercase;
-      font-size: 10px;
-      text-align: center;
-    }
-
-    &.tp-datepicker-table--normal-weekdays {
-      .tp-datepicker-day_name {
-        &:nth-child(6), &:nth-child(7){
-          color: $tpDatepickerHolidaysColor;
-        }
-      }
-    }
-
-    &.tp-datepicker-table--sunday-first {
-      .tp-datepicker-day_name {
-        &:first-child, &:last-child{
-          color: $tpDatepickerHolidaysColor;
-        }
-      }
-    }
-
-    .tp-datepicker-prev-date {
-      color: $tpDatepickerDisabledColor;
-      cursor: $tpDatepickerOutherDatesCursor;
-    }
-
-    .tp-datepicker-current {
-      cursor: pointer;
-      color: $tpDatepickerSecondColor;
-    }
-
-    .tp-datepicker-next {
-      opacity: .4;
-      color: $tpDatepickerSecondColor;
-      display: $tpDatepickerNextDatesDisplay;
-      cursor: $tpDatepickerOutherDatesCursor;
-      &.tp-datepicker-prev-date {
-        div {
-          color: $tpDatepickerDisabledColor;
-        }
-      }
-    }
-
-    .tp-datepicker-prev {
-      opacity: .4;
-      color: $tpDatepickerSecondColor;
-      visibility: $tpDatepickerPrevDatesVisibility;
-      &.tp-datepicker-prev-date {
-        div {
-          color: $tpDatepickerDisabledColor;
-        }
-      }
-    }
-
-    td.tp-datepicker-day_name {
-      height: 15px;
-      cursor: default;
-    }
-
-    td {
-      div {
-        line-height: 1;
-        height: 22px;
-        width: 100%;
-        margin: 1px 0;
-      }
-    }
-  }
-
-  .tp-datepicker-current-date,
-  .tp-datepicker-next,
-  .tp-datepicker-prev {
-     div {
-      position: relative;
-      text-align: center;
-      z-index: 1;
-      padding: 5px 0;
-    }
-  }
-
-  .tp-datepicker-prev-month-control,
-  .tp-datepicker-next-month-control {
-    @extend .tp-datepicker-icon.tp-datepicker-icon-arrow;
+    max-width: 260px;
+    height: 220px;
+    padding-bottom: 15px;
+    padding-top: 5px;
+    z-index: $tpDatepickerZIndex;
+    border: $tpDatepickerBorder;
+    background: $tpDatepickerBackgroundColor;
+    box-shadow: $tpDatepickerBoxShadow;
+    transition: all .2s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: absolute;
-    top: 15px;
-    width: 15px;
-    height: 13px;
-    font-size: 15px;
-    content: '';
-  }
-
-  .tp-datepicker-prev-month-control:hover,
-  .tp-datepicker-next-month-control:hover {
-    cursor: pointer;
-    opacity: .7;
-  }
-
-  .tp-datepicker-prev-month-control {
-    left: 15px;
-  }
-
-  .tp-datepicker-next-month-control {
-    right: 15px;
-    transform: rotate(180deg);
-  }
-
-  &.tp-datepicker--current_month {
-    .tp-datepicker-prev-month-control,
-    .tp-datepicker-prev-month-control:hover {
-      opacity: .3;
-      cursor: default;
+    &.tp-datepicker--active {
+        transform: scale(1);
     }
-  }
+
+    .tp-datepicker-header {
+        width: 100%;
+        height: 40px;
+        text-align: center;
+        padding: 10px 9px 0;
+    }
+
+    .tp-datepicker-container {
+        padding: 0 5px;
+    }
+
+    &.tp-datepicker-hidden {
+        opacity: 0;
+        transform: scale(1, 0);
+    }
+
+
+    .tp-datepicker-table{
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
+
+        .tp-datepicker-day_name {
+            text-transform: uppercase;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        &.tp-datepicker-table--normal-weekdays {
+            .tp-datepicker-day_name {
+                &:nth-child(6), &:nth-child(7){
+                    color: $tpDatepickerHolidaysColor;
+                }
+            }
+        }
+
+        &.tp-datepicker-table--sunday-first {
+            .tp-datepicker-day_name {
+                &:first-child, &:last-child{
+                    color: $tpDatepickerHolidaysColor;
+                }
+            }
+        }
+
+        .tp-datepicker-prev-date {
+            color: $tpDatepickerDisabledColor;
+            cursor: $tpDatepickerOutherDatesCursor;
+            opacity: .3;
+        }
+
+        .tp-datepicker-current {
+            cursor: pointer;
+            color: $tpDatepickerSecondColor;
+        }
+
+        .tp-datepicker-next {
+            opacity: .4;
+            color: $tpDatepickerSecondColor;
+            display: $tpDatepickerNextDatesDisplay;
+            cursor: $tpDatepickerOutherDatesCursor;
+            &.tp-datepicker-prev-date {
+                div {
+                    color: $tpDatepickerDisabledColor;
+                }
+            }
+        }
+
+        .tp-datepicker-prev {
+            opacity: .4;
+            color: $tpDatepickerSecondColor;
+            visibility: $tpDatepickerPrevDatesVisibility;
+            &.tp-datepicker-prev-date {
+                div {
+                    color: $tpDatepickerDisabledColor;
+                }
+            }
+        }
+
+        td.tp-datepicker-day_name {
+            height: 15px;
+            cursor: default;
+        }
+
+        td {
+            div {
+                line-height: 1;
+                height: 22px;
+                width: 100%;
+                margin: 1px 0;
+            }
+        }
+    }
+
+    .tp-datepicker-current-date,
+    .tp-datepicker-next,
+    .tp-datepicker-prev {
+        div {
+            position: relative;
+            text-align: center;
+            z-index: 1;
+            padding: 5px 0;
+        }
+    }
+
+
+    .tp-datepicker-prev-month-control:hover,
+        .tp-datepicker-next-month-control:hover {
+        cursor: pointer;
+        opacity: .7;
+    }
+
+    .tp-datepicker-prev-month-control {
+        left: 15px;
+    }
+
+    .tp-datepicker-next-month-control {
+        right: 15px;
+        transform: rotate(180deg);
+    }
+
+    &.tp-datepicker--current_month {
+        .tp-datepicker-prev-month-control,
+        .tp-datepicker-prev-month-control:hover {
+            opacity: .3;
+            cursor: default;
+        }
+    }
 }
+
+/*THEMING*/
+
+/*default*/
+.tp-datepicker {
+
+    @include tp-datepicker;
+    .tp-datepicker-prev-month-control,
+    .tp-datepicker-next-month-control {
+        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow;
+        position: absolute;
+        top: 15px;
+        width: 15px;
+        height: 13px;
+        font-size: 15px;
+        content: '';
+    }
+    &.tp-datepicker-simple {
+        .tp-datepicker-current:hover {
+            background-color: $tpDatepickerSecondColor;
+            color: $tpDatepickerBackgroundColor;
+        }
+    }
+}
+
+
+/*green*/
+.tp-datepicker-theme--green {
+
+    @include tp-datepicker;
+    .tp-datepicker-prev-month-control,
+    .tp-datepicker-next-month-control {
+        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow-theme--green ;
+        position: absolute;
+        top: 15px;
+        width: 15px;
+        height: 13px;
+        font-size: 15px;
+        content: '';
+    }
+    &.tp-datepicker-simple {
+        .tp-datepicker-current:hover {
+            background-color: $tpDatepickerSecondColorGreen;
+            color: $tpDatepickerBackgroundColor;
+        }
+    }
+
+}
+
+/*yellow*/
+.tp-datepicker-theme--yellow {
+
+    @include tp-datepicker;
+    .tp-datepicker-prev-month-control,
+    .tp-datepicker-next-month-control {
+        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow-theme--yellow ;
+        position: absolute;
+        top: 15px;
+        width: 15px;
+        height: 13px;
+        font-size: 15px;
+        content: '';
+    }
+    &.tp-datepicker-simple {
+        .tp-datepicker-current:hover {
+            background-color: $tpDatepickerSecondColorYellow;
+            color: $tpDatepickerBackgroundColorYellow;
+        }
+    }
+
+}
+
+/*pink*/
+.tp-datepicker-theme--pink {
+
+    @include tp-datepicker;
+    .tp-datepicker-prev-month-control,
+    .tp-datepicker-next-month-control {
+        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow-theme--pink;
+        position: absolute;
+        top: 15px;
+        width: 15px;
+        height: 13px;
+        font-size: 15px;
+        content: '';
+    }
+    &.tp-datepicker-simple {
+        .tp-datepicker-current:hover {
+            background-color: $tpDatepickerSecondColorPink;
+            color: $tpDatepickerBackgroundColorPink;
+        }
+    }
+
+}
+
+/*blue*/
+.tp-datepicker-theme--blue {
+
+    @include tp-datepicker;
+    .tp-datepicker-prev-month-control,
+    .tp-datepicker-next-month-control {
+        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow-theme--blue ;
+        position: absolute;
+        top: 15px;
+        width: 15px;
+        height: 13px;
+        font-size: 15px;
+        content: '';
+    }
+    &.tp-datepicker-simple {
+        .tp-datepicker-current:hover {
+            background-color: $tpDatepickerSecondColorYellow;
+            color: $tpDatepickerBackgroundColorYellow;
+        }
+    }
+
+}
+
+/*dark*/
+.tp-datepicker-theme--dark {
+
+    @include tp-datepicker;
+    .tp-datepicker-prev-month-control,
+    .tp-datepicker-next-month-control {
+        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow-theme--dark ;
+        position: absolute;
+        top: 15px;
+        width: 15px;
+        height: 13px;
+        font-size: 15px;
+        content: '';
+    }
+    &.tp-datepicker-simple {
+        .tp-datepicker-current:hover {
+            background-color: $tpDatepickerSecondColorYellow;
+            color: $tpDatepickerBackgroundColorYellow;
+        }
+    }
+
+}
+
+/*Bright*/
+.tp-datepicker-theme--bright {
+
+    @include tp-datepicker;
+    .tp-datepicker-prev-month-control,
+    .tp-datepicker-next-month-control {
+        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow-theme--bright ;
+        position: absolute;
+        top: 15px;
+        width: 15px;
+        height: 13px;
+        font-size: 15px;
+        content: '';
+    }
+    &.tp-datepicker-simple {
+        .tp-datepicker-current:hover {
+            background-color: $tpDatepickerSecondColorBright;
+            color: $tpDatepickerBackgroundColorBright;
+        }
+    }
+
+}
+
+
+
+
+
+/*--THEMING*/
