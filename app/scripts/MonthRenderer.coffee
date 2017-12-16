@@ -2,7 +2,7 @@ isTouchDevice = require('./modules/isTouchDevice')
 
 
 class MonthRenderer
-  _activeDays: 45
+  _activeDays: 60
   prefix: ''
   marks: ['prev', 'current-date', 'next']
   isTouchDevice: null
@@ -74,7 +74,7 @@ class MonthRenderer
         for (var day = prevMonthStart, fin = prevMonthEnd; day < fin; days.push([prevYear, prevMonth, day++, this.marksPrev, true]));
 
         for (var day = 1, fin = this._monthLength(year, month) + 1; day < fin; days.push([year, month, day++, this.marksCurrent, true]));
-        for (var day = 1; day < 14; days.push([nextYear, nextMonth, day++, this.marksNext, true]));
+        for (var day = 1; day < (this.visibleWeeksNum - 4) * 7; days.push([nextYear, nextMonth, day++, this.marksNext, true]));
     }
     else {
 
@@ -101,9 +101,9 @@ class MonthRenderer
 
             days.push([year, month, day, this.marksCurrent, active]);
         }
-        // console.log(43 - (prevMonthEnd - prevMonthStart + this._monthLength(year, month - 1)))
+        // console.log((this.visibleWeeksNum * 7) - (prevMonthEnd - prevMonthStart + this._monthLength(year, month - 1)))
         //next month
-        for (var day = 1; day <= 43 - this._monthLength(year, month - 1); day++)
+        for (var day = 1; day <= (this.visibleWeeksNum * 7 + 1) - this._monthLength(year, month - 1); day++)
         {
             var active = false;
             if( this._activeDays - this._diffDate(new Date(year, month, day), rDate) > 0 ) active = true;
@@ -145,7 +145,7 @@ class MonthRenderer
       el.textContent = @daysNames[i]
 
     daysHash = {}
-    for i in [0...42]
+    for i in [0...@visibleWeeksNum * 7]
       cd = days[i]
       el = table.appendChild(document.createElement('tr')) if i % 7 == 0
       date = "#{cd[0]}-#{cd[1]}-#{cd[2]}"
