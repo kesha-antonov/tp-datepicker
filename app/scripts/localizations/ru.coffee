@@ -1,5 +1,4 @@
-window.translations ||= {}
-window.translations['datepicker'] =
+ruTranslation =
   start_from_sunday: 0,
   months: ["", "Январь", "Февраль", "Март", "Апрель", "Май",
     "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
@@ -8,3 +7,5 @@ window.translations['datepicker'] =
   legend:
     startDate: "Дата заезда"
     endDate: "Дата выезда"
+
+module.exports = ruTranslation

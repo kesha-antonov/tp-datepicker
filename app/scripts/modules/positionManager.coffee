@@ -1,4 +1,4 @@
-window.positionManager =
+positionManager =
   positionAround: (targetNode, sourceNode, forcedBottom = false, offsets={top: 0, left: 0}) ->
     sourceNode.style.position = 'absolute'
     bodyRect = document.documentElement.getBoundingClientRect()
@@ -36,3 +36,5 @@ window.positionManager =
       el = el.offsetParent
 
     return top: _y, left: _x
+
+module.exports = positionManager

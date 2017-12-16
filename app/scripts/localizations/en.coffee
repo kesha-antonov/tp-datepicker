@@ -1,5 +1,4 @@
-window.translations || = {}
-window.translations['datepicker'] =
+enTranslation =
   start_from_sunday: 1
   months: ["", "January", "February", "March", "April",
     "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -8,3 +7,5 @@ window.translations['datepicker'] =
   legend:
     startDate: "Check in"
     endDate: "Check out"
+
+module.exports = enTranslation

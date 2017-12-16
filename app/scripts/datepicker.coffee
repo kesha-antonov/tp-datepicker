@@ -1,4 +1,12 @@
-class @TpDatepicker
+ruTranslation = require('./localizations/ru')
+enTranslation = require('./localizations/en')
+PopupRenderer = require('./PopupRenderer')
+SwipeDetector = require('./modules/SwipeDetector')
+positionManager = require('./modules/positionManager')
+isTouchDevice = require('./modules/isTouchDevice')
+
+
+class Datepicker
   prefix: ''
   roles: []
   role: null
@@ -6,8 +14,8 @@ class @TpDatepicker
   popupRenderer: false
   today: new Date()
   isCurrentMonth: false
-  t: window.translations.datepicker
-  isTouchDevice: window.isTouchDevice
+  t: ruTranslation
+  isTouchDevice: null
   settedRoles: false
   legend: false
   type: 'simple'
@@ -15,10 +23,14 @@ class @TpDatepicker
   offsets:
     top: 0
     left: 0
+  theme: false
 
   onSelect: (date, role) -> console.log "#{role} selected date #{date}"
 
   constructor: (options = {}) ->
+    @options = options
+    @isTouchDevice = isTouchDevice()
+
     @nodes = []
     @datepickerWrapper = options.wrapper || document.body
     @roles = (options.role && [options.role]) || options.roles || ['tp-datepicker']
@@ -26,11 +38,12 @@ class @TpDatepicker
     @onSelect = options.callback if options.callback
     @prefix = options.prefix if options.prefix
     @offsets = options.offsets if options.offsets
-
+    @theme = options.theme if options.theme
 
     for role in @roles
       node = @nodes[role] = @datepickerWrapper.querySelector("[role=\"#{role}\"]")
       node.classList.add "#{@prefix}tp-datepicker-trigger"
+
       @[role] = @_parseDate(node.getAttribute('data-date'))
       node.setAttribute('readonly', true)
       node.addEventListener 'focus', @_listenerFor(role)
@@ -45,15 +58,14 @@ class @TpDatepicker
 
 
     listener = (event_name, element) => @_callback_proxy(event_name, element)
-    @popupRenderer = new TpDatepickerPopupRenderer(this, listener, @prefix)
+    @popupRenderer = new PopupRenderer(this, listener, @prefix, @theme, @options.visibleWeeksNum)
 
 
-    if window.SwipeDetector
-      new SwipeDetector @popupRenderer.node,
-        left: => @nextMonth()
-        right: => @prevMonth()
-        down: => @popupRenderer.node.classList.remove("#{@prefix}tp-datepicker--active")
-        up: => @popupRenderer.node.classList.remove("#{@prefix}tp-datepicker--active")
+    new SwipeDetector @popupRenderer.node,
+      left: => @nextMonth()
+      right: => @prevMonth()
+      down: => @popupRenderer.node.classList.remove("#{@prefix}tp-datepicker--active")
+      up: => @popupRenderer.node.classList.remove("#{@prefix}tp-datepicker--active")
 
 
     @popupRenderer.node.querySelector('[role="tp-datepicker-prev"]').addEventListener 'click', => @prevMonth()
@@ -107,8 +119,7 @@ class @TpDatepicker
     @_renderDatepicker()
     for role, node of @nodes
       node.classList.toggle("#{@prefix}tp-datepicker-trigger--active", role == @role) if @roles.indexOf(role) > -1
-    if window.positionManager
-      window.positionManager.positionAround @nodes[@role], @popupRenderer.node, false, @offsets
+    positionManager.positionAround @nodes[@role], @popupRenderer.node, false, @offsets
 
 
   _callback_proxy: (event_name, element) ->
@@ -161,3 +172,5 @@ class @TpDatepicker
 
   _setScale: (value, element = @popupRenderer.node) ->
     element.style.webkitTransform = element.style.transform = "scale(#{value})"
+
+module.exports = Datepicker

@@ -1,7 +1,10 @@
-class @TpDatepickerPopupRenderer
+MonthRenderer = require('./MonthRenderer')
+
+class PopupRenderer
   prefix: ''
   node: false
   monthRenderer: null
+  theme: false
 
   render: ->
     year = @datepicker.year
@@ -19,18 +22,28 @@ class @TpDatepickerPopupRenderer
     @datepickerContainerNode.replaceChild(node, @datepickerContainerNode.childNodes[0])
 
 
-  constructor: (@datepicker, listener, prefix) ->
+  constructor: (@datepicker, listener, prefix, @theme, visibleWeeksNum) ->
     @prefix = prefix if prefix
     @onlyFuture = @datepicker.onlyFuture
-    dayNames = @datepicker.t.days
+    daysNames = @datepicker.t.days
     sundayFirst = @datepicker.t.start_from_sunday
-    dayNames.unshift(dayNames.pop()) if sundayFirst
-    @monthRenderer = new TpDatepickerMonthRenderer(listener, dayNames, sundayFirst, @prefix, @onlyFuture)
+    daysNames.unshift(daysNames.pop()) if sundayFirst
+    @monthRenderer = new MonthRenderer({
+      daysNames
+      sundayFirst
+      visibleWeeksNum
+      callback: listener
+      @prefix
+      @onlyFuture
+      @theme
+    })
 
     @node = document.createElement('div')
     @nodeClassList = @node.classList
     @nodeClassList.add "#{@prefix}tp-datepicker"
     @nodeClassList.add "#{@prefix}tp-datepicker-#{@datepicker.type}"
+    if @theme then @nodeClassList.add "#{@prefix}tp-datepicker-theme--#{@theme}"
+
 
     headerNode = document.createElement('div')
     headerNode.className = "#{@prefix}tp-datepicker-header"
@@ -68,3 +81,5 @@ class @TpDatepickerPopupRenderer
 
 
   updateMonth: (text) -> @MonthNode.textContent = text
+
+module.exports = TpDatepickerPopupRenderer

@@ -1,4 +1,4 @@
-class @TpDatepickerRange extends TpDatepicker
+class DatepickerRange extends Datepicker
   isEndDate: false
   settedRoles: {}
   prevRole: false
@@ -144,3 +144,5 @@ class @TpDatepickerRange extends TpDatepicker
 
   _changeDate: (date, step = 1) ->
     new Date((new Date(date)).setDate(date.getDate() + step))
+
+module.exports = DatepickerRange

@@ -1,6 +1,4 @@
-window.isTouchDevice = window.ontouchstart || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
-
-class @SwipeDetector
+class SwipeDetector
   xDown: null
   yDown: null
   wrapper: null
@@ -48,3 +46,5 @@ class @SwipeDetector
     @yDiff += @yDown - yUp
     @xDown = xUp
     @yDown = yUp
+
+module.exports = SwipeDetector
