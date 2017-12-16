@@ -82,4 +82,4 @@ class PopupRenderer
 
   updateMonth: (text) -> @MonthNode.textContent = text
 
-module.exports = TpDatepickerPopupRenderer
+module.exports = PopupRenderer
