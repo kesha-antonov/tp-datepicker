@@ -158,9 +158,13 @@ class Datepicker
 
 
   _parseDate: (string) ->
-    return unless string
+    unless string?
+      return
+    if Object.prototype.toString.call(string) is '[object Date]'
+      return string
+
     array = string.split('-')
-    new Date(array[0], parseInt(array[1], 10) - 1, array[2])
+    return new Date(array[0], parseInt(array[1], 10) - 1, array[2])
 
   _stringifyDate: (date) ->
     "#{date.getFullYear()}-#{date.getMonth() + 1}-#{date.getDate()}"
