@@ -56,7 +56,6 @@ class Datepicker
     @currentYear = @today.getFullYear()
     @currentDay = @today.getDate()
 
-
     listener = (event_name, element) => @_callback_proxy(event_name, element)
     @popupRenderer = new PopupRenderer(this, listener, @prefix, @theme, @options.visibleWeeksNum)
 

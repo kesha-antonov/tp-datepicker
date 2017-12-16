@@ -14,7 +14,8 @@ class PopupRenderer
       month,
       @datepicker.isCurrentMonth,
       @datepicker.isPrevMonth,
-      @datepicker.currentDay
+      @datepicker.currentDay,
+      @datepicker.currentYear
     )
     @nodeClassList.toggle "#{@prefix}tp-datepicker--current_month", @onlyFuture && @datepicker.isCurrentMonth
 

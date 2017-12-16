@@ -25,8 +25,8 @@ class MonthRenderer
     [@marksPrev, @marksCurrent, @marksNext] = @marks
     @isTouchDevice = isTouchDevice()
 
-  render: (year, month, isCurrentMonth, isPrevMonth, currentDay) ->
-    @_buildTable(@_monthDaysArray(year, month), isCurrentMonth, isPrevMonth, currentDay, month)
+  render: (year, month, isCurrentMonth, isPrevMonth, currentDay, currentYear) ->
+    @_buildTable(@_monthDaysArray(year, month), isCurrentMonth, isPrevMonth, currentDay, month, currentYear)
 
   _firstDay: (year, month) -> (new Date(year, month - 1, 1)).getDay()
 
@@ -78,36 +78,31 @@ class MonthRenderer
     }
     else {
 
-        //prew month
+        // NOTE: PREV MONTH
         for (var day = prevMonthStart; day < prevMonthEnd; day++)
         {
             var active = false;
-            if( this._activeDays - this._diffDate(new Date(prevYear, prevMonth-1, day), rDate) > 0 ) active = true;
+            if( this._diffDate(new Date(prevYear, prevMonth-1, day), rDate) > 0 ) active = true;
             days.push([prevYear, prevMonth, day, this.marksPrev, active]);
-            //console.log(new Date(prevYear, prevMonth - 1, day) );
         }
 
-        //cur month
+        // NOTE: CUR MONTH
         for (var day = 1; day < this._monthLength(year, month) + 1; day++)
         {
             var active = false;
             var dd = new Date(year, month - 1 , day);
             var d = this._diffDate(dd, rDate);
-         //   console.log(new Date(year, month  , day) );
 
-            if( this._activeDays - this._diffDate(new Date(year, month - 1 , day), rDate) > 0 ) {
+            if( this._diffDate(new Date(year, month - 1 , day), rDate) > 0 ) {
                 active = true;
             }
 
             days.push([year, month, day, this.marksCurrent, active]);
         }
-        // console.log((this.visibleWeeksNum * 7) - (prevMonthEnd - prevMonthStart + this._monthLength(year, month - 1)))
-        //next month
+        // NOTE: NEXT MONTH
         for (var day = 1; day <= (this.visibleWeeksNum * 7 + 1) - this._monthLength(year, month - 1); day++)
         {
-            var active = false;
-            if( this._activeDays - this._diffDate(new Date(year, month, day), rDate) > 0 ) active = true;
-
+            var active = true;
             days.push([nextYear, nextMonth, day, this.marksNext, active]);
         }
     }
@@ -122,7 +117,7 @@ class MonthRenderer
     unless target.classList.contains("#{@prefix}tp-datepicker-prev-date") && @onlyFuture
       target.hasAttribute('id') && @callback(event.type, target)
 
-  _buildTable: (days, isCurrentMonth, isPrevMonth, currentDay, currentMonth) ->
+  _buildTable: (days, isCurrentMonth, isPrevMonth, currentDay, currentMonth, currentYear) ->
     table = document.createElement 'table'
     table.classList.add "#{@prefix}tp-datepicker-table"
 
@@ -156,15 +151,20 @@ class MonthRenderer
       day.setAttribute('data-date', date)
       innerEl.textContent = cd[2]
       active = cd[4]
-      if !active
+      if not active
         day.className += "#{@prefix}tp-datepicker-current-date #{@prefix}tp-datepicker-prev-date"
       else
         day.className = "#{@prefix}tp-datepicker-#{cd[3]}"
-        if isPrevMonth || (isCurrentMonth && ((currentDay > cd[2] && currentMonth >= cd[1]) || cd[3] == @marksPrev))
+        if isPrevMonth or (
+          isCurrentMonth and (
+            ( currentDay > cd[2] and currentMonth >= cd[1] and currentYear >= cd[0] ) or
+            cd[3] is @marksPrev
+          )
+        )
             day.className += " #{@prefix}tp-datepicker-prev-date"
         else
-             day.className += " #{@prefix}tp-datepicker-current
-#            if @theme then day.className += " #{@prefix}tp-datepicker-current#{ '--' + @theme}"
+          day.className += " #{@prefix}tp-datepicker-current"
+        # if @theme then day.className += " #{@prefix}tp-datepicker-current#{ '--' + @theme}"
 
     @days = daysHash
 
