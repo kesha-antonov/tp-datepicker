@@ -57,7 +57,14 @@ class Datepicker
     @currentDay = @today.getDate()
 
     listener = (event_name, element) => @_callback_proxy(event_name, element)
-    @popupRenderer = new PopupRenderer(this, listener, @prefix, @theme, @options.visibleWeeksNum)
+    @popupRenderer = new PopupRenderer({
+      listener
+      datepicker: @
+      prefix: @prefix
+      theme: @theme
+      visibleWeeksNum: @options.visibleWeeksNum
+      clickableDaysInFuture: @options.clickableDaysInFuture
+    })
 
 
     new SwipeDetector @popupRenderer.node,
@@ -151,7 +158,7 @@ class Datepicker
   _renderDatepicker:  ->
     @isCurrentMonth = @currentYear == @year && @currentMonth == @month
     @isPrevMonth = @currentYear > @year || (@currentYear == @year && @currentMonth > @month)
-    @popupRenderer.render this
+    @popupRenderer.render @
 
     @popupRenderer.node.classList.add("#{@prefix}tp-datepicker--active")
 

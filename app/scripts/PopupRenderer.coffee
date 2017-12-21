@@ -23,8 +23,11 @@ class PopupRenderer
     @datepickerContainerNode.replaceChild(node, @datepickerContainerNode.childNodes[0])
 
 
-  constructor: (@datepicker, listener, prefix, @theme, visibleWeeksNum) ->
-    @prefix = prefix if prefix
+  constructor: (props) ->
+    @datepicker = props.datepicker
+    @theme = props.theme
+
+    @prefix = props.prefix if props.prefix
     @onlyFuture = @datepicker.onlyFuture
     daysNames = @datepicker.t.days
     sundayFirst = @datepicker.t.start_from_sunday
@@ -32,11 +35,12 @@ class PopupRenderer
     @monthRenderer = new MonthRenderer({
       daysNames
       sundayFirst
-      visibleWeeksNum
-      callback: listener
-      @prefix
-      @onlyFuture
-      @theme
+      visibleWeeksNum: props.visibleWeeksNum
+      clickableDaysInFuture: props.clickableDaysInFuture
+      callback: props.listener
+      prefix: @prefix
+      onlyFuture: @onlyFuture
+      theme: @theme
     })
 
     @node = document.createElement('div')

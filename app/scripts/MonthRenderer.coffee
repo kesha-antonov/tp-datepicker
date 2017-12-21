@@ -8,6 +8,7 @@ class MonthRenderer
   isTouchDevice: null
   theme: false
   visibleWeeksNum: 6
+  clickableDaysInFuture: 45
 
   constructor: (props) ->
     @callback = props.callback
@@ -15,6 +16,8 @@ class MonthRenderer
     @sundayFirst = props.sundayFirst
     if props.visibleWeeksNum?
       @visibleWeeksNum = props.visibleWeeksNum
+    if props.clickableDaysInFuture?
+      @clickableDaysInFuture = props.clickableDaysInFuture
 
     if props.prefix?
       @prefix = props.prefix
@@ -33,8 +36,10 @@ class MonthRenderer
   # Add ten hours to 32th day to avoid winter time adjustment
   _monthLength: (year, month) -> 32 - new Date(year, month - 1, 32, 10).getDate()
 
-  _diffDate: (ds, de) ->
-    timeDiff = Math.abs(de.getTime() - ds.getTime())
+  _diffDate: (ds, de, abs = true) ->
+    timeDiff = de.getTime() - ds.getTime()
+    if abs
+      timeDiff = Math.abs(timeDiff)
     Math.ceil (timeDiff / (1000 * 3600 * 24))
 
 
@@ -77,13 +82,20 @@ class MonthRenderer
         for (var day = 1; day < (this.visibleWeeksNum - 4) * 7; days.push([nextYear, nextMonth, day++, this.marksNext, true]));
     }
     else {
+        var currentDay;
+        var futureEndDate = new Date()
+        futureEndDate.setDate(futureEndDate.getDate() + this.clickableDaysInFuture)
 
         // NOTE: PREV MONTH
         for (var day = prevMonthStart; day < prevMonthEnd; day++)
         {
-            var active = false;
-            if( this._diffDate(new Date(prevYear, prevMonth-1, day), rDate) > 0 ) active = true;
-            days.push([prevYear, prevMonth, day, this.marksPrev, active]);
+          if ( month >= 2 )
+            currentDay = new Date(year, (month - 2), day);
+          else
+            currentDay = new Date(year-1, (month - 2 + 12), day);
+
+          var active = ( this._diffDate(currentDay, rDate) > 0 && this._diffDate(currentDay, futureEndDate, false) > 0 );
+          days.push([prevYear, prevMonth, day, this.marksPrev, active]);
         }
 
         // NOTE: CUR MONTH
@@ -93,7 +105,8 @@ class MonthRenderer
             var dd = new Date(year, month - 1 , day);
             var d = this._diffDate(dd, rDate);
 
-            if( this._diffDate(new Date(year, month - 1 , day), rDate) > 0 ) {
+            currentDay = new Date(year, month - 1 , day)
+            if( this._diffDate(currentDay, rDate) > 0 && this._diffDate(currentDay, futureEndDate, false) > 0 ) {
                 active = true;
             }
 
@@ -102,7 +115,8 @@ class MonthRenderer
         // NOTE: NEXT MONTH
         for (var day = 1; day <= (this.visibleWeeksNum * 7 + 1) - this._monthLength(year, month - 1); day++)
         {
-            var active = true;
+            currentDay = new Date(year, month, day)
+            var active = this._diffDate(currentDay, futureEndDate, false) > 0;
             days.push([nextYear, nextMonth, day, this.marksNext, active]);
         }
     }
