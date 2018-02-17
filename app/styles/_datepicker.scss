@@ -2,7 +2,6 @@
 @import 'icons';
 
 input.tp-datepicker-trigger {
-    @extend .tp-datepicker-icon.tp-datepicker-icon-calendar;
     background-repeat: no-repeat;
     background-position: right center;
     background-size: auto $tpDatepickerCalendarViewBoxHeight;
@@ -189,7 +188,6 @@ input.tp-datepicker-trigger.tp-datepicker-trigger--active {
     @include tp-datepicker;
     .tp-datepicker-prev-month-control,
     .tp-datepicker-next-month-control {
-        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow;
         position: absolute;
         top: 15px;
         width: 15px;

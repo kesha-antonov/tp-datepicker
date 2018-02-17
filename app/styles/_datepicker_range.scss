@@ -34,7 +34,6 @@
       }
 
       div {
-        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow_from;
         background-position: left;
 
         &:before {
@@ -52,7 +51,6 @@
       }
 
       div {
-        @extend .tp-datepicker-icon.tp-datepicker-icon-arrow_to;
         background-position: right;
 
         &:before {
@@ -84,17 +82,7 @@
     }
   }
 
-  .tp-datepicker-legend--end-date {
-    &:before {
-      @extend .tp-datepicker-icon.tp-datepicker-icon-arrow_to;
-    }
-  }
-
   .tp-datepicker-legend--start-date {
     color: $tpDatepickerBrandColor;
-
-    &:before {
-      @extend .tp-datepicker-icon.tp-datepicker-icon-arrow_from;
-    }
   }
 }

@@ -56,6 +56,7 @@ class PopupRenderer
     prevMonthNode = document.createElement('span')
     prevMonthNode.className = "#{@prefix}tp-datepicker-prev-month-control"
     prevMonthNode.setAttribute('role', 'tp-datepicker-prev')
+    prevMonthNode.innerHTML = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30.6 24.6"><path fill="#000" d="M.6 10.8l.2-.2 9.9-10c.8-.8 2.2-.8 3 0l.3.2c.8.8.8 2.2 0 3L7.9 10h20.6c1.2 0 2.1 1 2.1 2.1v.3c0 1.2-1 2.1-2.1 2.1H7.9l6.2 6.2c.8.8.8 2.2 0 3l-.3.3c-.8.8-2.2.8-3 0L.8 14l-.2-.2c-.8-.8-.8-2.2 0-3z"/></svg>'
     headerNode.appendChild prevMonthNode
 
     @MonthNode = document.createElement('span')
@@ -65,6 +66,7 @@ class PopupRenderer
     nextMonthNode = document.createElement('span')
     nextMonthNode.className = "#{@prefix}tp-datepicker-next-month-control"
     nextMonthNode.setAttribute('role', 'tp-datepicker-next')
+    nextMonthNode.innerHTML = '<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30.6 24.6"><path fill="#000" d="M.6 10.8l.2-.2 9.9-10c.8-.8 2.2-.8 3 0l.3.2c.8.8.8 2.2 0 3L7.9 10h20.6c1.2 0 2.1 1 2.1 2.1v.3c0 1.2-1 2.1-2.1 2.1H7.9l6.2 6.2c.8.8.8 2.2 0 3l-.3.3c-.8.8-2.2.8-3 0L.8 14l-.2-.2c-.8-.8-.8-2.2 0-3z"/></svg>'
     headerNode.appendChild nextMonthNode
 
     @node.appendChild headerNode
