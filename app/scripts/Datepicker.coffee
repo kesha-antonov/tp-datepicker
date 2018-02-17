@@ -50,6 +50,9 @@ class Datepicker
       node.addEventListener 'keydown', (event) => @_processKey(event.keyCode)
 
     @_initPopup()
+    if options.id?
+      @popupRenderer.node.id = options.id
+
 
   _initPopup: ->
     @currentMonth = @today.getMonth() + 1

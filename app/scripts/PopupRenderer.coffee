@@ -84,8 +84,6 @@ class PopupRenderer
       @node.appendChild @legendNode
 
     document.body.appendChild @node
-    @node
-
 
   updateMonth: (text) -> @MonthNode.textContent = text
 
