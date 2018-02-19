@@ -6,6 +6,10 @@ positionManager = require('./modules/positionManager')
 isTouchDevice = require('./modules/isTouchDevice')
 
 
+TRANSLATIONS =
+  ru: ruTranslation
+  en: enTranslation
+
 class Datepicker
   prefix: ''
   roles: []
@@ -24,6 +28,7 @@ class Datepicker
     top: 0
     left: 0
   theme: false
+  lang: 'ru'
 
   onSelect: (date, role) -> console.log "#{role} selected date #{date}"
 
@@ -39,6 +44,10 @@ class Datepicker
     @prefix = options.prefix if options.prefix
     @offsets = options.offsets if options.offsets
     @theme = options.theme if options.theme
+
+    if ['en', 'ru'].indexOf( options.lang ) > -1
+      @lang = options.lang
+    @t = TRANSLATIONS[@lang]
 
     for role in @roles
       node = @nodes[role] = @datepickerWrapper.querySelector("[role=\"#{role}\"]")
