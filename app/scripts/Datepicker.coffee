@@ -117,7 +117,7 @@ class Datepicker
         @nodes[@role].setAttribute('value', '')
 
   prevMonth: ->
-    @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 1
+    @popupRenderer.node.querySelector(".#{@prefix}tp-datepicker-next-month-control").style.opacity = 1
 
     if @onlyFuture and @isCurrentMonth
       return
@@ -134,9 +134,9 @@ class Datepicker
     if @maxYear and @maxMonth
       isNextMonth = false
       if @year == @maxYear && @month == @maxMonth - 1
-        @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 0.3
+        @popupRenderer.node.querySelector(".#{@prefix}tp-datepicker-next-month-control").style.opacity = 0.3
       else
-        @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 1
+        @popupRenderer.node.querySelector(".#{@prefix}tp-datepicker-next-month-control").style.opacity = 1
       if @year > @maxYear
         isNextMonth = false
       else if @year < @maxYear
@@ -152,7 +152,7 @@ class Datepicker
         else
           @month++
       else
-        @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 0.3
+        @popupRenderer.node.querySelector(".#{@prefix}tp-datepicker-next-month-control").style.opacity = 0.3
     else
       if @month == 12
         @year++
