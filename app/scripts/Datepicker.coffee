@@ -29,6 +29,8 @@ class Datepicker
     left: 0
   theme: false
   lang: 'ru'
+  maxYear: null
+  maxMonth: null
 
   onSelect: (date, role) -> console.log "#{role} selected date #{date}"
 
@@ -44,6 +46,9 @@ class Datepicker
     @prefix = options.prefix if options.prefix
     @offsets = options.offsets if options.offsets
     @theme = options.theme if options.theme
+
+    @maxYear = new Date(options.max).getFullYear() if options.max
+    @maxMonth = new Date(options.max).getMonth() + 1 if options.max
 
     if ['en', 'ru'].indexOf( options.lang ) > -1
       @lang = options.lang
@@ -112,7 +117,11 @@ class Datepicker
         @nodes[@role].setAttribute('value', '')
 
   prevMonth: ->
-    return if @onlyFuture && @isCurrentMonth
+    @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 1
+
+    if @onlyFuture and @isCurrentMonth
+      return
+
     if @month == 1
       @year--
       @month = 12
@@ -122,11 +131,34 @@ class Datepicker
     @_renderDatepicker()
 
   nextMonth: ->
-    if @month == 12
-      @year++
-      @month = 1
+    if @maxYear and @maxMonth
+      isNextMonth = false
+      if @year == @maxYear && @month == @maxMonth - 1
+        @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 0.3
+      else
+        @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 1
+      if @year > @maxYear
+        isNextMonth = false
+      else if @year < @maxYear
+        isNextMonth = true
+      else if @month < @maxMonth
+        isNextMonth = true
+      else
+        isNextMonth = false
+      if isNextMonth
+        if @month == 12
+          @year++
+          @month = 1
+        else
+          @month++
+      else
+        @popupRenderer.node.querySelector('.tp-datepicker-next-month-control').style.opacity = 0.3
     else
-      @month++
+      if @month == 12
+        @year++
+        @month = 1
+      else
+        @month++
 
     @_renderDatepicker()
 
