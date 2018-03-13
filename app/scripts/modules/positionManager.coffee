@@ -7,13 +7,19 @@ positionManager =
     targetHeight = targetNode.offsetHeight
     bottomSpace = document.documentElement.clientHeight - targetRect.bottom
 
-    showBottom = forcedBottom || bottomSpace > sourceNode.offsetHeight
-    showBottom = bottomSpace > targetRect.top unless showBottom
+    # NOTE: COMPATIBILITY WITH IE
+    scrollX = window.scrollX or window.pageXOffset
+    scrollY = window.scrollY or window.pageYOffset
 
-    if showBottom
-      top = targetPosition.top + targetHeight - bodyRect.top + offsets.top
-      left = targetPosition.left - bodyRect.left + offsets.left
-    else
+    left = targetRect.left + scrollX
+    top = targetRect.top + scrollY + ( targetRect.bottom - targetRect.top)
+    bottom = targetRect.bottom + scrollY
+    right = targetRect.right + scrollX
+
+    showBottom = forcedBottom or bottomSpace > sourceNode.offsetHeight
+    showBottom = bottomSpace > top unless showBottom
+
+    unless showBottom
       top = targetPosition.top - sourceNode.offsetHeight - bodyRect.top - offsets.top
       left = targetPosition.left - bodyRect.left + offsets.left
 
