@@ -29,6 +29,7 @@ class Datepicker
     left: 0
   theme: false
   lang: 'ru'
+  max: null
   maxYear: null
   maxMonth: null
 
@@ -47,8 +48,10 @@ class Datepicker
     @offsets = options.offsets if options.offsets
     @theme = options.theme if options.theme
 
-    @maxYear = new Date(options.max).getFullYear() if options.max
-    @maxMonth = new Date(options.max).getMonth() + 1 if options.max
+    if options.max
+      @max = new Date(options.max)
+      @maxYear = @max.getFullYear()
+      @maxMonth = @max.getMonth() + 1
 
     if ['en', 'ru'].indexOf( options.lang ) > -1
       @lang = options.lang
@@ -81,6 +84,7 @@ class Datepicker
       theme: @theme
       visibleWeeksNum: @options.visibleWeeksNum
       clickableDaysInFuture: @options.clickableDaysInFuture
+      max: @max
     })
 
 

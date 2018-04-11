@@ -41,6 +41,7 @@ class PopupRenderer
       prefix: @prefix
       onlyFuture: @onlyFuture
       theme: @theme
+      max: props.max
     })
 
     @node = document.createElement('div')

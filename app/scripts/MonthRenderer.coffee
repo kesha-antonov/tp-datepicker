@@ -14,13 +14,12 @@ class MonthRenderer
     @callback = props.callback
     @daysNames = props.daysNames
     @sundayFirst = props.sundayFirst
-    if props.visibleWeeksNum?
-      @visibleWeeksNum = props.visibleWeeksNum
-    if props.clickableDaysInFuture?
-      @clickableDaysInFuture = props.clickableDaysInFuture
 
-    if props.prefix?
-      @prefix = props.prefix
+    if props.max? and not props.clickableDaysInFuture?
+      props.clickableDaysInFuture = @_getDiffDays(props.max)
+
+    for x in ['visibleWeeksNum', 'prefix', 'clickableDaysInFuture']
+      @[x] = props[x] if props[x]?
 
     @onlyFuture = props.onlyFuture
     @theme = props.theme
@@ -30,6 +29,11 @@ class MonthRenderer
 
   render: (year, month, isCurrentMonth, isPrevMonth, currentDay, currentYear) ->
     @_buildTable(@_monthDaysArray(year, month), isCurrentMonth, isPrevMonth, currentDay, month, currentYear)
+
+  _getDiffDays: (max) ->
+    now = new Date()
+    timeDiff = Math.abs(max.getTime() - now.getTime())
+    return Math.ceil(timeDiff / (1000 * 3600 * 24))
 
   _firstDay: (year, month) -> (new Date(year, month - 1, 1)).getDay()
 
