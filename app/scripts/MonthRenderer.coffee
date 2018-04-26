@@ -40,7 +40,11 @@ class MonthRenderer
   # Add ten hours to 32th day to avoid winter time adjustment
   _monthLength: (year, month) -> 32 - new Date(year, month - 1, 32, 10).getDate()
 
-  _diffDate: (ds, de, abs = true) ->
+  _diffDate: (ds, de, abs) ->
+    # NOTE: IOS 8 SAFARI COMPATIBILIYY
+    unless abs?
+      abs = true
+
     timeDiff = de.getTime() - ds.getTime()
     if abs
       timeDiff = Math.abs(timeDiff)

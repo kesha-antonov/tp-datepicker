@@ -8,7 +8,10 @@ class DatepickerRange extends Datepicker
 
   onSelect: (startDate, endDate, role) -> console.log "#{role} selected range from #{startDate} to #{endDate}"
 
-  constructor: (options = {}) ->
+  constructor: (options) ->
+    # NOTE: IOS 8 SAFARI COMPATIBILIYY
+    options ||= {}
+
     options.role = null
     options.roles ||= ['startDate', 'endDate']
     @legend = options.legend if options.legend
@@ -142,7 +145,11 @@ class DatepickerRange extends Datepicker
           classList.remove "#{@prefix}tp-datepicker-start-sausage"
           classList.remove "#{@prefix}tp-datepicker-end-sausage"
 
-  _changeDate: (date, step = 1) ->
+  _changeDate: (date, step) ->
+    # NOTE: IOS 8 SAFARI COMPATIBILIYY
+    unless step?
+      step = 1
+
     new Date((new Date(date)).setDate(date.getDate() + step))
 
 module.exports = DatepickerRange

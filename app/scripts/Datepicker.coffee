@@ -35,8 +35,8 @@ class Datepicker
 
   onSelect: (date, role) -> console.log "#{role} selected date #{date}"
 
-  constructor: (options = {}) ->
-    @options = options
+  constructor: (options) ->
+    @options = options or {}
     @isTouchDevice = isTouchDevice()
 
     @nodes = []
@@ -228,7 +228,11 @@ class Datepicker
     dateArray = string.split('-')
     "#{dateArray[2]} #{@t.short_months[parseInt(dateArray[1], 10)]} #{dateArray[0]}"
 
-  _setScale: (value, element = @popupRenderer.node) ->
+  _setScale: (value, element) ->
+    # NOTE: IOS 8 SAFARI COMPATIBILIYY
+    unless element?
+      element = @popupRenderer.node
+
     element.style.webkitTransform = element.style.transform = "scale(#{value})"
 
 module.exports = Datepicker
