@@ -1,5 +1,11 @@
 positionManager =
-  positionAround: (targetNode, sourceNode, forcedBottom = false, offsets={top: 0, left: 0}) ->
+  positionAround: (targetNode, sourceNode, forcedBottom, offsets) ->
+    # NOTE: IOS8 COMPAT
+    unless forcedBottom?
+      forcedBottom = false
+    unless offsets?
+      offsets = { top: 0, left: 0 }
+      
     sourceNode.style.position = 'absolute'
     bodyRect = document.documentElement.getBoundingClientRect()
     targetRect = targetNode.getBoundingClientRect()

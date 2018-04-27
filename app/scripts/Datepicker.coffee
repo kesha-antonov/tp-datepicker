@@ -40,21 +40,21 @@ class Datepicker
     @isTouchDevice = isTouchDevice()
 
     @nodes = []
-    @datepickerWrapper = options.wrapper || document.body
-    @roles = (options.role && [options.role]) || options.roles || ['tp-datepicker']
+    @datepickerWrapper = @options.wrapper or document.body
+    @roles = (options.role and [options.role]) or @options.roles or ['tp-datepicker']
     @role = @roles[0]
-    @onSelect = options.callback if options.callback
-    @prefix = options.prefix if options.prefix
-    @offsets = options.offsets if options.offsets
-    @theme = options.theme if options.theme
+    @onSelect = @options.callback if @options.callback
+    @prefix = @options.prefix if @options.prefix
+    @offsets = @options.offsets if @options.offsets
+    @theme = @options.theme if @options.theme
 
-    if options.max
+    if @options.max
       @max = new Date(options.max)
       @maxYear = @max.getFullYear()
       @maxMonth = @max.getMonth() + 1
 
-    if ['en', 'ru'].indexOf( options.lang ) > -1
-      @lang = options.lang
+    if ['en', 'ru'].indexOf( @options.lang ) > -1
+      @lang = @options.lang
     @t = TRANSLATIONS[@lang]
 
     for role in @roles
@@ -67,8 +67,8 @@ class Datepicker
       node.addEventListener 'keydown', (event) => @_processKey(event.keyCode)
 
     @_initPopup()
-    if options.id?
-      @popupRenderer.node.id = options.id
+    if @options.id?
+      @popupRenderer.node.id = @options.id
 
 
   _initPopup: ->
@@ -102,11 +102,11 @@ class Datepicker
     document.addEventListener 'click', (event) =>
       return unless node = event.target
 
-      if node.tagName != 'BODY' && node.tagName != 'HTML'
+      if node.tagName != 'BODY' and node.tagName != 'HTML'
         return if @roles.indexOf(node.getAttribute('role')) >= 0
         while node = node.parentNode
           break if node.tagName == 'BODY'
-          return if !node.parentNode || node.classList.contains("#{@prefix}tp-datepicker") ||
+          return if !node.parentNode or node.classList.contains("#{@prefix}tp-datepicker") ||
             @roles.indexOf(node.getAttribute('role')) >= 0
 
       @nodes[@role].classList.remove("#{@prefix}tp-datepicker-trigger--active")
@@ -137,7 +137,7 @@ class Datepicker
   nextMonth: ->
     if @maxYear and @maxMonth
       isNextMonth = false
-      if @year == @maxYear && @month == @maxMonth - 1
+      if @year == @maxYear and @month == @maxMonth - 1
         @popupRenderer.node.querySelector(".#{@prefix}tp-datepicker-next-month-control").style.opacity = 0.3
       else
         @popupRenderer.node.querySelector(".#{@prefix}tp-datepicker-next-month-control").style.opacity = 1
@@ -167,7 +167,7 @@ class Datepicker
     @_renderDatepicker()
 
   show: (@role, @callback) ->
-    @date = @_parseDate(@[@role]) || @today
+    @date = @_parseDate(@[@role]) or @today
     @month = @date.getMonth() + 1
     @year = @date.getFullYear()
     @_renderDatepicker()
@@ -203,9 +203,9 @@ class Datepicker
     @nodes[role].setAttribute('data-date', date)
     @nodes[role].setAttribute('value', @_formatDate(date))
 
-  _renderDatepicker:  ->
-    @isCurrentMonth = @currentYear == @year && @currentMonth == @month
-    @isPrevMonth = @currentYear > @year || (@currentYear == @year && @currentMonth > @month)
+  _renderDatepicker: ->
+    @isCurrentMonth = @currentYear == @year and @currentMonth == @month
+    @isPrevMonth = @currentYear > @year or (@currentYear == @year and @currentMonth > @month)
     @popupRenderer.render @
 
     @popupRenderer.node.classList.add("#{@prefix}tp-datepicker--active")

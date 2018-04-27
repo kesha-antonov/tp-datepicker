@@ -7,7 +7,15 @@ class SwipeDetector
   xDiff: 0
   yDiff: 0
   blockScroll: false
-  constructor: (@wrapper = document.body, @callbacks = {}, @sensivity = 10) ->
+  constructor: (@wrapper, @callbacks, @sensivity) ->
+    # NOTE: IOS8 COMPAT
+    unless @wrapper?
+      @wrapper = document.body
+    unless @callbacks?
+      @callbacks = {}
+    unless @sensivity?
+      @sensivity = 10
+
     @wrapper.addEventListener 'touchstart', ((e) => @handleTouchStart(e)), false
     @wrapper.addEventListener 'touchend', ((e) => @handleTouchEnd(e)), false
     @wrapper.addEventListener 'touchmove', ((e) => @handleTouchMove(e)), false
