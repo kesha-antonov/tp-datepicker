@@ -55,7 +55,7 @@ class Datepicker
 
     if ['en', 'ru'].indexOf( @options.lang ) > -1
       @lang = @options.lang
-    @t = TRANSLATIONS[@lang]
+    @t = @options.locale or TRANSLATIONS[@lang]
 
     for role in @roles
       node = @nodes[role] = @datepickerWrapper.querySelector("[role=\"#{role}\"]")
