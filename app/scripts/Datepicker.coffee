@@ -84,6 +84,7 @@ class Datepicker
       theme: @theme
       visibleWeeksNum: @options.visibleWeeksNum
       clickableDaysInFuture: @options.clickableDaysInFuture
+      min: @options.min
       max: @max
     })
 
@@ -200,6 +201,9 @@ class Datepicker
       @onSelect(date, role)
 
   _setupDate: (role, date) ->
+    if typeof date is 'object'
+      date = @_stringifyDate(date)
+
     @nodes[role].setAttribute('data-date', date)
     @nodes[role].setAttribute('value', @_formatDate(date))
 

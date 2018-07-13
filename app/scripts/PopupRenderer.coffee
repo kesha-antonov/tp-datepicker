@@ -6,28 +6,13 @@ class PopupRenderer
   monthRenderer: null
   theme: false
 
-  render: ->
-    year = @datepicker.year
-    month = @datepicker.month
-    node = @monthRenderer.render(
-      year,
-      month,
-      @datepicker.isCurrentMonth,
-      @datepicker.isPrevMonth,
-      @datepicker.currentDay,
-      @datepicker.currentYear
-    )
-    @nodeClassList.toggle "#{@prefix}tp-datepicker--current_month", @onlyFuture && @datepicker.isCurrentMonth
-
-    @updateMonth "#{@datepicker.t.months[month]} #{year}"
-    @datepickerContainerNode.replaceChild(node, @datepickerContainerNode.childNodes[0])
-
-
   constructor: (props) ->
-    @datepicker = props.datepicker
-    @theme = props.theme
+    @props = props
 
-    @prefix = props.prefix if props.prefix
+    @datepicker = @props.datepicker
+    @theme = @props.theme
+
+    @prefix = @props.prefix if @props.prefix
     @onlyFuture = @datepicker.onlyFuture
     daysNames = @datepicker.t.days
     sundayFirst = @datepicker.t.start_from_sunday
@@ -35,13 +20,13 @@ class PopupRenderer
     @monthRenderer = new MonthRenderer({
       daysNames
       sundayFirst
-      visibleWeeksNum: props.visibleWeeksNum
-      clickableDaysInFuture: props.clickableDaysInFuture
-      callback: props.listener
+      visibleWeeksNum: @props.visibleWeeksNum
+      clickableDaysInFuture: @props.clickableDaysInFuture
+      callback: @props.listener
       prefix: @prefix
       onlyFuture: @onlyFuture
       theme: @theme
-      max: props.max
+      max: @props.max
     })
 
     @node = document.createElement('div')
@@ -86,6 +71,37 @@ class PopupRenderer
 
     document.body.appendChild @node
 
-  updateMonth: (text) -> @MonthNode.textContent = text
+  updateMonth: (text) ->
+    @MonthNode.textContent = text
+
+  render: ->
+    {
+      year
+      month
+      currentDay
+      currentYear
+    } = @datepicker
+
+    if @props.min?
+      minDate = if typeof @props.min is 'function'
+        @props.min()
+      else
+        @props.min
+      if minDate?
+        currentDay = minDate.getDate()
+        currentYear = minDate.getFullYear()
+
+    node = @monthRenderer.render(
+      year
+      month
+      @datepicker.isCurrentMonth
+      @datepicker.isPrevMonth
+      currentDay
+      currentYear
+    )
+    @nodeClassList.toggle "#{@prefix}tp-datepicker--current_month", @onlyFuture and @datepicker.isCurrentMonth
+
+    @updateMonth "#{@datepicker.t.months[month]} #{year}"
+    @datepickerContainerNode.replaceChild(node, @datepickerContainerNode.childNodes[0])
 
 module.exports = PopupRenderer

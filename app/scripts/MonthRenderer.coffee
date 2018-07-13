@@ -11,24 +11,23 @@ class MonthRenderer
   clickableDaysInFuture: 45
 
   constructor: (props) ->
-    @callback = props.callback
-    @daysNames = props.daysNames
-    @sundayFirst = props.sundayFirst
+    @props = props
 
-    if props.max? and not props.clickableDaysInFuture?
-      props.clickableDaysInFuture = @_getDiffDays(props.max)
+    @callback = @props.callback
+    @daysNames = @props.daysNames
+    @sundayFirst = @props.sundayFirst
+
+    if @props.max? and not @props.clickableDaysInFuture?
+      @props.clickableDaysInFuture = @_getDiffDays(@props.max)
 
     for x in ['visibleWeeksNum', 'prefix', 'clickableDaysInFuture']
-      @[x] = props[x] if props[x]?
+      @[x] = @props[x] if @props[x]?
 
-    @onlyFuture = props.onlyFuture
-    @theme = props.theme
+    @onlyFuture = @props.onlyFuture
+    @theme = @props.theme
 
     [@marksPrev, @marksCurrent, @marksNext] = @marks
     @isTouchDevice = isTouchDevice()
-
-  render: (year, month, isCurrentMonth, isPrevMonth, currentDay, currentYear) ->
-    @_buildTable(@_monthDaysArray(year, month), isCurrentMonth, isPrevMonth, currentDay, month, currentYear)
 
   _getDiffDays: (max) ->
     now = new Date()
@@ -190,6 +189,9 @@ class MonthRenderer
 
     @days = daysHash
 
-    table
+    return table
+
+  render: (year, month, isCurrentMonth, isPrevMonth, currentDay, currentYear) ->
+    @_buildTable(@_monthDaysArray(year, month), isCurrentMonth, isPrevMonth, currentDay, month, currentYear)
 
 module.exports = MonthRenderer
