@@ -48,8 +48,8 @@ class Datepicker
     @offsets = @options.offsets if @options.offsets
     @theme = @options.theme if @options.theme
 
-    if @options.max
-      @max = new Date(options.max)
+    if @options.max?
+      @max = @_getDateFromString(@options.max)
       @maxYear = @max.getFullYear()
       @maxMonth = @max.getMonth() + 1
 
@@ -70,6 +70,15 @@ class Datepicker
     if @options.id?
       @popupRenderer.node.id = @options.id
 
+  _forceTwoDigits: (n) ->
+    return n if n > 9
+    return "0#{n}"
+
+  _getDateFromString: (strDate) ->
+    return strDate if typeof strDate isnt 'string'
+    regex=/(\d{4})\-(\d{1,2})\-(\d{1,2})/
+    match = regex.exec(strDate)
+    return new Date("#{match[1]}-#{@_forceTwoDigits(+match[2])}-#{@_forceTwoDigits(+match[3])}")
 
   _initPopup: ->
     @currentMonth = @today.getMonth() + 1
