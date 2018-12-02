@@ -63,7 +63,10 @@ class Datepicker
 
       @[role] = @_parseDate(node.getAttribute('data-date'))
       node.setAttribute('readonly', true)
-      node.addEventListener 'focus', @_listenerFor(role)
+      node.addEventListener 'focus', (e) =>
+        @_listenerFor({ role, e })
+        if @options.onFocus?
+          @options.onFocus(e)
       node.addEventListener 'keydown', (event) => @_processKey(event.keyCode)
 
     @_initPopup()
@@ -194,12 +197,11 @@ class Datepicker
       else
         return false
 
-  _listenerFor: (role) ->
-    return (event) =>
-      @show role, (date) => @_showCallback(date, role)
-      if @isTouchDevice
-        event.preventDefault()
-        event.target.blur()
+  _listenerFor: ({ role, e }) =>
+    @show role, (date) => @_showCallback(date, role)
+    if @isTouchDevice
+      e.preventDefault()
+      e.target.blur()
 
   _showCallback: (date, role) ->
     if date then @[role] = date
